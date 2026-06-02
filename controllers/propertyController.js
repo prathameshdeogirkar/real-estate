@@ -19,6 +19,10 @@ const addProperty = (req, res) => {
     if (req.body.offer_price !== undefined) req.body.offer_price = parseNumericField(req.body.offer_price, "Offer Price");
     if (req.body.rent_amount !== undefined) req.body.rent_amount = parseNumericField(req.body.rent_amount, "Rent Amount");
     if (req.body.deposit_amount !== undefined) req.body.deposit_amount = parseNumericField(req.body.deposit_amount, "Deposit Amount");
+    if (req.body.area !== undefined) req.body.area = parseNumericField(req.body.area, "Area");
+    if (req.body.bedrooms !== undefined) req.body.bedrooms = parseNumericField(req.body.bedrooms, "Bedrooms");
+    if (req.body.bathrooms !== undefined) req.body.bathrooms = parseNumericField(req.body.bathrooms, "Bathrooms");
+    if (req.body.parking !== undefined) req.body.parking = parseNumericField(req.body.parking, "Parking");
   } catch (error) {
     return res.status(400).json({
       success: false,
@@ -82,6 +86,10 @@ const updateProperty = (req, res) => {
     if (req.body.offer_price !== undefined) req.body.offer_price = parseNumericField(req.body.offer_price, "Offer Price");
     if (req.body.rent_amount !== undefined) req.body.rent_amount = parseNumericField(req.body.rent_amount, "Rent Amount");
     if (req.body.deposit_amount !== undefined) req.body.deposit_amount = parseNumericField(req.body.deposit_amount, "Deposit Amount");
+    if (req.body.area !== undefined) req.body.area = parseNumericField(req.body.area, "Area");
+    if (req.body.bedrooms !== undefined) req.body.bedrooms = parseNumericField(req.body.bedrooms, "Bedrooms");
+    if (req.body.bathrooms !== undefined) req.body.bathrooms = parseNumericField(req.body.bathrooms, "Bathrooms");
+    if (req.body.parking !== undefined) req.body.parking = parseNumericField(req.body.parking, "Parking");
   } catch (error) {
     return res.status(400).json({
       success: false,
