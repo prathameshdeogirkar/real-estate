@@ -8,6 +8,10 @@ const uploadRoutes = require("./routes/uploadRoutes");
 const completedProjectRoutes = require("./routes/completedProjectRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const inquiryRoutes = require("./routes/inquiryRoutes");
+const constructionRoutes = require("./routes/constructionRoutes");
+const interiorWorkRoutes = require("./routes/interiorWorkRoutes");
+const governmentProjectRoutes = require("./routes/governmentProjectRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
 
 const app = express();
 
@@ -19,6 +23,10 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/completed-projects", completedProjectRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/inquiries", inquiryRoutes);
+app.use("/api/constructions", constructionRoutes);
+app.use("/api/interior-works", interiorWorkRoutes);
+app.use("/api/government-projects", governmentProjectRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend Running");
