@@ -1,36 +1,23 @@
-const db = require('../config/db');
+const mongoose = require("mongoose");
 
-const Inquiry = {
-  create: (data, callback) => {
-    const { name, phone, whatsapp, email, property_id, message } = data;
-    db.query(
-      'INSERT INTO inquiries (name, phone, whatsapp, email, property_id, message) VALUES (?, ?, ?, ?, ?, ?)',
-      [name, phone, whatsapp, email, property_id, message],
-      callback
-    );
+const inquirySchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    phone: { type: String },
+    whatsapp: { type: String },
+    email: { type: String },
+    property_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Property' },
+    message: { type: String },
+    status: { type: String, default: "Pending" },
+    is_read: { type: Boolean, default: false },
   },
-
-  getAll: (callback) => {
-    db.query(`
-      SELECT i.*, p.title as property_title 
-      FROM inquiries i 
-      LEFT JOIN properties p ON i.property_id = p.id 
-      ORDER BY i.created_at DESC
-    `, callback);
-  },
-
-  delete: (id, callback) => {
-    db.query('DELETE FROM inquiries WHERE id = ?', [id], callback);
-  },
-
-  updateStatus: (id, status, callback) => {
-    db.query('UPDATE inquiries SET status = ? WHERE id = ?', [status, id], callback);
-  },
-
-  markAsRead: (id, callback) => {
-    db.query('UPDATE inquiries SET is_read = TRUE WHERE id = ?', [id], callback);
+  {
+    timestamps: { createdAt: 'created_at', updatedAt: false },
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
-};
+);
+
+const Inquiry = mongoose.model("Inquiry", inquirySchema);
 
 module.exports = Inquiry;
-

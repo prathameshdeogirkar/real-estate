@@ -1,39 +1,19 @@
-const db = require('../config/db');
+const mongoose = require("mongoose");
 
-const Review = {
-  create: (data, callback) => {
-    const { name, rating, message } = data;
-    db.query(
-      'INSERT INTO reviews (name, rating, message) VALUES (?, ?, ?)',
-      [name, rating, message],
-      callback
-    );
+const reviewSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    rating: { type: Number },
+    message: { type: String },
+    status: { type: String, default: "Pending" },
   },
-
-  getAll: (callback) => {
-    db.query('SELECT * FROM reviews ORDER BY created_at DESC', callback);
-  },
-
-  getApproved: (callback) => {
-    db.query('SELECT * FROM reviews WHERE status = "Approved" ORDER BY created_at DESC', callback);
-  },
-
-  delete: (id, callback) => {
-    db.query('DELETE FROM reviews WHERE id = ?', [id], callback);
-  },
-
-  updateStatus: (id, status, callback) => {
-    db.query('UPDATE reviews SET status = ? WHERE id = ?', [status, id], callback);
-  },
-
-  update: (id, data, callback) => {
-    const { name, rating, message } = data;
-    db.query(
-      'UPDATE reviews SET name = ?, rating = ?, message = ? WHERE id = ?',
-      [name, rating, message, id],
-      callback
-    );
+  {
+    timestamps: { createdAt: 'created_at', updatedAt: false },
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
-};
+);
+
+const Review = mongoose.model("Review", reviewSchema);
 
 module.exports = Review;

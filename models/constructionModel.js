@@ -1,83 +1,30 @@
-const db = require("../config/db");
+const mongoose = require("mongoose");
 
-const addConstruction = (data, callback) => {
-  const sql = `
-    INSERT INTO constructions 
-    (title, project_type, description, location, area, budget, completion_time, status, contractor_name, materials, features, image, images, contact_number, is_featured)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-  db.query(
-    sql,
-    [
-      data.title,
-      data.project_type || null,
-      data.description || null,
-      data.location || null,
-      data.area || null,
-      data.budget || null,
-      data.completion_time || null,
-      data.status || null,
-      data.contractor_name || null,
-      data.materials || null,
-      data.features ? JSON.stringify(data.features) : null,
-      data.image || null,
-      data.images ? JSON.stringify(data.images) : null,
-      data.contact_number || null,
-      data.is_featured === "true" || data.is_featured === true || data.is_featured === 1 ? 1 : 0
-    ],
-    callback
-  );
-};
+const constructionSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    project_type: { type: String },
+    description: { type: String },
+    location: { type: String },
+    area: { type: String },
+    budget: { type: String },
+    completion_time: { type: String },
+    status: { type: String },
+    contractor_name: { type: String },
+    materials: { type: String },
+    features: { type: [String] },
+    image: { type: String },
+    images: { type: [String] },
+    contact_number: { type: String },
+    is_featured: { type: Boolean, default: false },
+  },
+  {
+    timestamps: { createdAt: 'created_at', updatedAt: false },
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
-const getAllConstructions = (callback) => {
-  const sql = "SELECT * FROM constructions ORDER BY created_at DESC";
-  db.query(sql, callback);
-};
+const Construction = mongoose.model("Construction", constructionSchema);
 
-const deleteConstruction = (id, callback) => {
-  const sql = "DELETE FROM constructions WHERE id = ?";
-  db.query(sql, [id], callback);
-};
-
-const updateConstruction = (id, data, callback) => {
-  const sql = `
-    UPDATE constructions
-    SET title=?, project_type=?, description=?, location=?, area=?, budget=?, completion_time=?, status=?, contractor_name=?, materials=?, features=?, image=?, images=?, contact_number=?, is_featured=?
-    WHERE id=?
-  `;
-  db.query(
-    sql,
-    [
-      data.title,
-      data.project_type || null,
-      data.description || null,
-      data.location || null,
-      data.area || null,
-      data.budget || null,
-      data.completion_time || null,
-      data.status || null,
-      data.contractor_name || null,
-      data.materials || null,
-      data.features ? (typeof data.features === 'string' ? data.features : JSON.stringify(data.features)) : null,
-      data.image || null,
-      data.images ? (typeof data.images === 'string' ? data.images : JSON.stringify(data.images)) : null,
-      data.contact_number || null,
-      data.is_featured === "true" || data.is_featured === true || data.is_featured === 1 ? 1 : 0,
-      id,
-    ],
-    callback
-  );
-};
-
-const getConstructionById = (id, callback) => {
-  const sql = "SELECT * FROM constructions WHERE id = ?";
-  db.query(sql, [id], callback);
-};
-
-module.exports = {
-  addConstruction,
-  getAllConstructions,
-  deleteConstruction,
-  updateConstruction,
-  getConstructionById,
-};
+module.exports = Construction;
