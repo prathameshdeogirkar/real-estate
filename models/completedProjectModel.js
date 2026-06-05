@@ -1,19 +1,38 @@
-const mongoose = require("mongoose");
+const db = require("../config/db");
 
-const completedProjectSchema = new mongoose.Schema(
-  {
-    title: { type: String, required: true },
-    description: { type: String },
-    image: { type: String },
-    year: { type: String },
-  },
-  {
-    timestamps: { createdAt: 'created_at', updatedAt: false },
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  }
-);
+const getCompletedProjects = (callback) => {
+  const sql = "SELECT * FROM completed_projects";
 
-const CompletedProject = mongoose.model("CompletedProject", completedProjectSchema);
+  db.query(sql, callback);
+};
 
-module.exports = CompletedProject;
+const addCompletedProject = (data, callback) => {
+  const sql = `
+    INSERT INTO completed_projects
+    (title, description, image, year)
+    VALUES (?, ?, ?, ?)
+  `;
+
+  db.query(
+    sql,
+    [
+      data.title,
+      data.description,
+      data.image,
+      data.year,
+    ],
+    callback
+  );
+};
+
+const deleteCompletedProject = (id, callback) => {
+  const sql = "DELETE FROM completed_projects WHERE id = ?";
+
+  db.query(sql, [id], callback);
+};
+
+module.exports = {
+  getCompletedProjects,
+  addCompletedProject,
+  deleteCompletedProject,
+};

@@ -15,7 +15,7 @@ const reviewRoutes = require("./routes/reviewRoutes");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
 
 app.use("/api/properties", propertyRoutes);
