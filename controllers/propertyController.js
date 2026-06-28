@@ -15,7 +15,6 @@ const parseNumericField = (value, fieldName) => {
 
 const addProperty = async (req, res) => {
   try {
-    console.log("➡️ [properties] CREATE request payload received:", req.body.title);
     if (req.body.price !== undefined) req.body.price = parseNumericField(req.body.price, "Price");
     if (req.body.offer_price !== undefined) req.body.offer_price = parseNumericField(req.body.offer_price, "Offer Price");
     if (req.body.rent_amount !== undefined) req.body.rent_amount = parseNumericField(req.body.rent_amount, "Rent Amount");
@@ -25,7 +24,6 @@ const addProperty = async (req, res) => {
     if (req.body.bathrooms !== undefined) req.body.bathrooms = parseNumericField(req.body.bathrooms, "Bathrooms");
 
     const property = await Property.create(req.body);
-    console.log(`🟢 [properties] Document successfully inserted into MongoDB! ID: ${property._id}`);
     res.status(201).json({
       message: "Property Added Successfully",
       property
@@ -41,9 +39,7 @@ const addProperty = async (req, res) => {
 
 const getAllProperties = async (req, res) => {
   try {
-    console.log("➡️ [properties] READ request for all documents");
     const properties = await Property.find();
-    console.log(`🟢 [properties] Found ${properties.length} documents in MongoDB`);
     res.status(200).json(properties);
   } catch (error) {
     console.error('🔴 DB Error fetching properties:', error);
@@ -57,12 +53,9 @@ const getAllProperties = async (req, res) => {
 const deleteProperty = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(`➡️ [properties] DELETE request for ID: ${id}`);
     const deleted = await Property.findByIdAndDelete(id);
     if (deleted) {
-      console.log(`🟢 [properties] Document successfully deleted! ID: ${id}`);
     } else {
-      console.log(`⚠️ [properties] Document to delete not found: ID: ${id}`);
     }
     res.status(200).json({
       message: "Property Deleted Successfully",
@@ -79,7 +72,6 @@ const deleteProperty = async (req, res) => {
 const updateProperty = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(`➡️ [properties] UPDATE request for ID: ${id}`);
 
     if (req.body.price !== undefined) req.body.price = parseNumericField(req.body.price, "Price");
     if (req.body.offer_price !== undefined) req.body.offer_price = parseNumericField(req.body.offer_price, "Offer Price");
@@ -91,9 +83,7 @@ const updateProperty = async (req, res) => {
 
     const updated = await Property.findByIdAndUpdate(id, req.body, { new: true });
     if (updated) {
-      console.log(`🟢 [properties] Document successfully updated! ID: ${id}`);
     } else {
-      console.log(`⚠️ [properties] Document to update not found: ID: ${id}`);
     }
     res.status(200).json({
       message: "Property Updated Successfully",
@@ -110,15 +100,12 @@ const updateProperty = async (req, res) => {
 const getPropertyById = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(`➡️ [properties] READ request for single document ID: ${id}`);
     const property = await Property.findById(id);
     
     if (!property) {
-      console.log(`⚠️ [properties] Document not found: ID: ${id}`);
       return res.status(404).json({ message: "Property not found" });
     }
 
-    console.log(`🟢 [properties] Found document for ID: ${id}`);
     res.status(200).json(property);
   } catch (error) {
     console.error('🔴 DB Error fetching property by ID:', error);
